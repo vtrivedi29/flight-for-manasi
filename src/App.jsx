@@ -3,28 +3,38 @@ import "./index.css";
 import { supabase } from "./supabaseClient";
 
 const ACTIVITIES = [
-  "Coffee + walk",
-  "Movie night",
+  "Coffee",
+  "Movie",
   "Board games",
-  "Campus photoshoot",
-  "Study date",
-  "Doing nothing together (my favorite)",
+  "Nature walk",
+  "Study",
+  "Do nothing together",
+  "Play a sport",
+  "Stay in 😈"
 ];
 
 const VIBES = [
-  "Cozy sweats and blankets",
-  "Adventure day",
-  "Lazy stay-in day",
-  "Romantic date night",
-  "Chaotic but fun",
+  "Cozy",
+  "Adventurous",
+  "Lazy",
+  "Romantic",
+  "Chaotic and Energetic",
+  "😈"
 ];
 
 const FOODS = [
   "Pizza",
-  "Thai food",
-  "Burgers",
-  "Dessert crawl",
-  "Home-cooked (I’ll try not to burn it)",
+  "Thai",
+  "Chicken Sandwich",
+  "Wings",
+  "Bagels",
+  "Sushi",
+  "Snacks",
+  "Pasta",
+  "Indian",
+  "Chinese",
+  "Healthy",
+  "You 😈",
 ];
 
 const DIRECTION_LABELS = {
@@ -1051,6 +1061,23 @@ function SchedulesPage({ onCreateNew, onOpenSchedule, currentUser }) {  const [p
 
       {loading && <p className="schedule-loading-text">Loading schedules…</p>}
 
+      <section className="card summary-card summary-card--visible schedules-love-card">
+        <p className="summary-text">
+          I know I couldn't make it this weekend, but why would that stop us from looking forward?
+          We have so many exciting things to plan and I can't wait for the next time I see you! This 
+          app serves not only as a cute little thing I made to say sorry, but something we can actually 
+          make use out of in planning our visits with each other. I hope you enjoy it.
+        </p>
+        <p className="summary-text">
+          I know I didn't show up today, I will do better: starting with the first plans we make. I love you Manasi ❤️"
+        </p>
+        <p className="closing">
+          Love,
+          <br />
+          Veyd
+        </p>
+      </section>
+
       {!loading && posts.length === 0 && (
         <p className="schedule-loading-text">
           No saved schedules yet. Save one from the day view and it’ll show up
@@ -1465,8 +1492,6 @@ function App() {
 
               {!canLock && (
                 <p className="helper-text">
-                  (I know commitment is scary, but at least commit to dinner
-                  with me 💔→❤️)
                 </p>
               )}
 
@@ -1518,16 +1543,7 @@ function App() {
                     (or you can come see me), I’m using this as my checklist and
                     my motivation.
                   </p>
-                  <p className="summary-text">
-                    You deserve someone who shows up. I’m sorry I didn’t this
-                    time, and I’m going to do better — starting with this exact
-                    plan.
-                  </p>
-                  <p className="closing">
-                    Love,
-                    <br />
-                    Veyd
-                  </p>
+                  
                 </>
               ) : (
                 <>
