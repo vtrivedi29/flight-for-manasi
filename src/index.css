@@ -793,3 +793,19 @@ body {
   color: white;
   border-color: rgba(59, 130, 246, 0.8);
 }
+
+.schedule-delete-button {
+  border-radius: 999px;
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  background: rgba(248, 113, 113, 0.06);
+  color: #b91c1c;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.schedule-delete-button:hover {
+  background: rgba(248, 113, 113, 0.16);
+  transform: translateY(-1px);
+}

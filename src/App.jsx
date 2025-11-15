@@ -1048,6 +1048,49 @@ function SchedulesPage({ onCreateNew, onOpenSchedule, currentUser }) {  const [p
     }
   };
 
+    const deleteSchedule = async (post) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this schedule? This will remove its likes, comments, and day blocks."
+    );
+    if (!confirmDelete) return;
+
+    // Optimistic UI: remove it locally right away
+    setPosts((prev) => prev.filter((p) => p.id !== post.id));
+
+    try {
+      // Remove likes and comments for this post
+      await supabase
+        .from("schedule_likes")
+        .delete()
+        .eq("post_id", post.id);
+
+      await supabase
+        .from("schedule_comments")
+        .delete()
+        .eq("post_id", post.id);
+
+      // Remove blocks and the underlying schedule row
+      await supabase
+        .from("trip_schedule_blocks")
+        .delete()
+        .eq("schedule_id", post.schedule_id);
+
+      await supabase
+        .from("trip_schedules")
+        .delete()
+        .eq("id", post.schedule_id);
+
+      // Finally remove the schedule post itself
+      await supabase
+        .from("schedule_posts")
+        .delete()
+        .eq("id", post.id);
+    } catch (e) {
+      console.error("Unexpected error deleting schedule", e);
+      // If you want, you could re-add the post to state on error
+    }
+  };
+
   return (
     <div className="schedules-page">
       <div className="schedule-header">
@@ -1129,6 +1172,14 @@ function SchedulesPage({ onCreateNew, onOpenSchedule, currentUser }) {  const [p
                   }
                 >
                   Open this day
+                </button>
+                
+                <button
+                  type="button"
+                  className="schedule-delete-button"
+                  onClick={() => deleteSchedule(post)}
+                >
+                  Delete
                 </button>
               </div>
 
