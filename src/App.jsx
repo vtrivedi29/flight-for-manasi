@@ -309,12 +309,30 @@ function ScheduleView({
       handleMouseUp();
     };
 
+    const touchMoveHandler = (e) => {
+      if (!e.touches || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      updateDragFromClientY(touch.clientY);
+      // prevent the whole page from scrolling while dragging
+      e.preventDefault();
+    };
+
+    const touchEndHandler = () => {
+      handleMouseUp();
+    };
+
     window.addEventListener("mousemove", moveHandler);
     window.addEventListener("mouseup", upHandler);
+    window.addEventListener("touchmove", touchMoveHandler, { passive: false });
+    window.addEventListener("touchend", touchEndHandler);
+    window.addEventListener("touchcancel", touchEndHandler);
 
     return () => {
       window.removeEventListener("mousemove", moveHandler);
       window.removeEventListener("mouseup", upHandler);
+      window.removeEventListener("touchmove", touchMoveHandler);
+      window.removeEventListener("touchend", touchEndHandler);
+      window.removeEventListener("touchcancel", touchEndHandler);
     };
   }, [dragState, readOnly]);
 
