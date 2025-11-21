@@ -848,3 +848,33 @@ body {
     max-width: 100%;
   }
 }
+
+/* Strong mobile layout override: schedule full width, palette below */
+@media (max-width: 600px) {
+  .schedule-view {
+    padding: 12px;
+  }
+
+  .schedule-layout {
+    display: block;           /* no side-by-side flex on mobile */
+  }
+
+  .schedule-column-wrapper {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .schedule-column {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .schedule-palette {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-top: 16px;
+  }
+}
