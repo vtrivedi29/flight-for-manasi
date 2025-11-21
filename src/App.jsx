@@ -517,12 +517,12 @@ function ScheduleView({
     }
   };
 
-  const handleBlockMouseDown = (e, block) => {
+  // Shared helper for mouse/touch drag start
+  const startDragAtClientY = (clientY, block) => {
     if (readOnly) return;
     if (!columnRef.current) return;
-    e.preventDefault();
     const rect = columnRef.current.getBoundingClientRect();
-    const clickY = e.clientY - rect.top;
+    const clickY = clientY - rect.top;
     const startPx = minutesToTop(block.start_minutes);
     const offsetY = clickY - startPx;
     const duration = block.end_minutes - block.start_minutes;
@@ -535,11 +535,27 @@ function ScheduleView({
     });
   };
 
-  const handleMouseMove = (e) => {
+  // Mouse down handler uses shared helper
+  const handleBlockMouseDown = (e, block) => {
+    if (readOnly) return;
+    e.preventDefault();
+    startDragAtClientY(e.clientY, block);
+  };
+
+  // Touch start handler uses shared helper
+  const handleBlockTouchStart = (e, block) => {
+    if (readOnly) return;
+    if (!e.touches || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    startDragAtClientY(touch.clientY, block);
+  };
+
+  // Shared drag update logic for both mouse and touch
+  const updateDragFromClientY = (clientY) => {
     if (readOnly) return;
     if (!dragState || !columnRef.current) return;
     const rect = columnRef.current.getBoundingClientRect();
-    let newTop = e.clientY - rect.top - dragState.offsetY;
+    let newTop = clientY - rect.top - dragState.offsetY;
 
     if (newTop < 0) newTop = 0;
     if (newTop > COLUMN_HEIGHT - dragState.duration) {
@@ -562,6 +578,22 @@ function ScheduleView({
     setDragState((prev) =>
       prev && prev.id === dragState.id ? { ...prev, latestTop: newTop } : prev
     );
+  };
+
+  const handleTouchMove = (e) => {
+    if (!e.touches || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    updateDragFromClientY(touch.clientY);
+    // prevent page from scrolling while dragging
+    e.preventDefault();
+  };
+
+  const handleTouchEnd = () => {
+    handleMouseUp();
+  };
+
+  const handleMouseMove = (e) => {
+    updateDragFromClientY(e.clientY);
   };
 
   const handleMouseUp = async () => {

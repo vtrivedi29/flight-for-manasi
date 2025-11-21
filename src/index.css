@@ -645,6 +645,8 @@ body {
   justify-content: flex-start;
   gap: 8px;
   margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .schedule-like-button {
@@ -808,4 +810,41 @@ body {
 .schedule-delete-button:hover {
   background: rgba(248, 113, 113, 0.16);
   transform: translateY(-1px);
+}
+
+.card, .planner-card, .schedule-card {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 480px) {
+  .option-group-title {
+    font-size: 1rem;
+  }
+  .options-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .schedule-layout {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .schedule-palette {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .schedule-column-wrapper {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .schedule-column {
+    max-width: 100%;
+  }
 }
