@@ -733,6 +733,67 @@ function ScheduleView({
       {!loading && (
         <>
           <div className="schedule-layout">
+            <div className="schedule-column-wrapper">
+              <div
+                className="schedule-column"
+                ref={columnRef}
+                style={{ height: COLUMN_HEIGHT }}
+              >
+                {Array.from({ length: (DAY_END - DAY_START) / 60 + 1 }).map(
+                  (_, idx) => {
+                    const hour = DAY_START / 60 + idx;
+                    const top = hour * 60 - DAY_START;
+                    return (
+                      <div
+                        key={hour}
+                        className="schedule-hour-line"
+                        style={{ top }}
+                      >
+                        <span className="schedule-hour-label">
+                          {formatHourLabel(hour)}
+                        </span>
+                      </div>
+                    );
+                  }
+                )}
+
+                {blocks.map((block) => (
+                  <div
+                    key={block.id}
+                    className="schedule-block"
+                    style={{
+                      top: minutesToTop(block.start_minutes),
+                      height: durationToHeight(
+                        block.start_minutes,
+                        block.end_minutes
+                      ),
+                      background: getBlockGradient(block.start_minutes),
+                    }}
+                    onMouseDown={(e) => handleBlockMouseDown(e, block)}
+                    onTouchStart={(e) => handleBlockTouchStart(e, block)}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                  >
+                    <div className="schedule-block-inner">
+                      <span className="schedule-block-label">{block.label}</span>
+                      {dragState && dragState.id === block.id && (
+                        <span className="schedule-block-time-inline">
+                          {formatTimeLabel(block.start_minutes)} –{" "}
+                          {formatTimeLabel(block.end_minutes)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+                {!readOnly && (
+                  <div className="schedule-trash-zone">
+                    🗑 Drag here to delete
+                  </div>
+                )}
+              </div>
+            </div>
+
             {!readOnly && (
               <div className="schedule-palette">
                 <div className="schedule-palette-section">
@@ -849,67 +910,6 @@ function ScheduleView({
                 </div>
               </div>
             )}
-
-            <div className="schedule-column-wrapper">
-              <div
-                className="schedule-column"
-                ref={columnRef}
-                style={{ height: COLUMN_HEIGHT }}
-              >
-                {Array.from({ length: (DAY_END - DAY_START) / 60 + 1 }).map(
-                  (_, idx) => {
-                    const hour = DAY_START / 60 + idx;
-                    const top = hour * 60 - DAY_START;
-                    return (
-                      <div
-                        key={hour}
-                        className="schedule-hour-line"
-                        style={{ top }}
-                      >
-                        <span className="schedule-hour-label">
-                          {formatHourLabel(hour)}
-                        </span>
-                      </div>
-                    );
-                  }
-                )}
-
-                {blocks.map((block) => (
-                  <div
-                    key={block.id}
-                    className="schedule-block"
-                    style={{
-                      top: minutesToTop(block.start_minutes),
-                      height: durationToHeight(
-                        block.start_minutes,
-                        block.end_minutes
-                      ),
-                      background: getBlockGradient(block.start_minutes),
-                    }}
-                    onMouseDown={(e) => handleBlockMouseDown(e, block)}
-                    onTouchStart={(e) => handleBlockTouchStart(e, block)}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                  >
-                    <div className="schedule-block-inner">
-                      <span className="schedule-block-label">{block.label}</span>
-                      {dragState && dragState.id === block.id && (
-                        <span className="schedule-block-time-inline">
-                          {formatTimeLabel(block.start_minutes)} –{" "}
-                          {formatTimeLabel(block.end_minutes)}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-
-                {!readOnly && (
-                  <div className="schedule-trash-zone">
-                    🗑 Drag here to delete
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
 
           {readOnly && existingPostId && (
