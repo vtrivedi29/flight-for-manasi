@@ -837,6 +837,9 @@ function ScheduleView({
                       background: getBlockGradient(block.start_minutes),
                     }}
                     onMouseDown={(e) => handleBlockMouseDown(e, block)}
+                    onTouchStart={(e) => handleBlockTouchStart(e, block)}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
                   >
                     <div className="schedule-block-inner">
                       <span className="schedule-block-label">{block.label}</span>
